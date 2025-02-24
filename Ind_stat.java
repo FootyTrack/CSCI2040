@@ -2,13 +2,11 @@ public class Ind_stat {
     private String id;
     private String name;
     private String country;
-    private int players;
 
-    public Ind_stat(String id, String name, String country, int players) {
+    public Ind_stat(String id, String name, String country) {
         this.id = id;
         this.name = name;
         this.country = country;
-        this.players = players;
     }
 
     public String getId() {
@@ -23,10 +21,6 @@ public class Ind_stat {
         return country;
     }
 
-    public int getPlayers() {
-        return players;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -35,13 +29,9 @@ public class Ind_stat {
         this.country = country;
     }
 
-    public void setPlayers(int players) {
-        this.players = players;
-    }
-
     @Override
     public String toString() {
-        return "ID: " + id + "\nTeam Name: " + name + "\nCountry: " + country + "\nNumber of Players: " + players;
+        return "ID: " + id + "\nPlayer Name: " + name + "\nCountry: " + country;
     }
 
 }
