@@ -60,7 +60,8 @@ public class Team {
             this.cleanSheets++;
         }
 
-        this.possession = possession;
+        this.possession += possession;
+        this.possession = (this.possession)/2;
         this.passesPerMatch = passesPerMatch;
 
         this.penaltiesAwarded += penaltiesAwarded;
