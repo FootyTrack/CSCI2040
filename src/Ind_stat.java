@@ -34,4 +34,15 @@ public class Ind_stat {
         return "ID: " + id + "\nPlayer Name: " + name + "\nCountry: " + country;
     }
 
+    public static void main(String[] args) {
+        Ind_stat player = new Ind_stat("101", "Mohammed Salah", "Egypt");
+
+        System.out.println(player);
+
+        player.setName("Ibrahima Konate");
+        player.setCountry("France");
+
+        System.out.println("\nAfter Update:");
+        System.out.println(player);
+    }
 }
