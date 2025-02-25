@@ -98,4 +98,15 @@ public class Ind_stat {
         + interceptions + "\nPasses: " + passes + "\nFouls: " + fouls + "\nShots: " + shots;
     }
 
+    public static void main(String[] args) {
+        Ind_stat player = new Ind_stat("101", "Mohammed Salah", "Egypt");
+
+        System.out.println(player);
+
+        player.setName("Ibrahima Konate");
+        player.setCountry("France");
+
+        System.out.println("\nAfter Update:");
+        System.out.println(player);
+    }
 }
