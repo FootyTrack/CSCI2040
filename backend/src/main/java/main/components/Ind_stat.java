@@ -1,5 +1,13 @@
 package main.components;
 
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvException;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Ind_stat {
     private String id;
     private String name;
@@ -90,6 +98,33 @@ public class Ind_stat {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public static List<Ind_stat> readIndStatsFromCSV(String filePath) {
+        List<Ind_stat> indStats = new ArrayList<>();
+        try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
+            reader.readNext();
+            List<String[]> records = reader.readAll();
+            for (String[] record : records) {
+                String id = record[0];
+                String name = record[1];
+                String country = record[2];
+                int appearances = Integer.parseInt(record[3]);
+                int yellow_cards = Integer.parseInt(record[4]);
+                int red_cards = Integer.parseInt(record[5]);
+                int tackles = Integer.parseInt(record[6]);
+                int interceptions = Integer.parseInt(record[7]);
+                int passes = Integer.parseInt(record[8]);
+                int fouls = Integer.parseInt(record[9]);
+                int shots = Integer.parseInt(record[10]);
+
+                Ind_stat indStat = new Ind_stat(id, name, country, appearances, yellow_cards, red_cards, tackles, interceptions, passes, fouls, shots);
+                indStats.add(indStat);
+            }
+        } catch (IOException | CsvException e) {
+            e.printStackTrace();
+        }
+        return indStats;
     }
 
     @Override

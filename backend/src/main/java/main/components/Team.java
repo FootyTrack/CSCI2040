@@ -1,5 +1,13 @@
 package main.components;
 
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvException;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Team {
 
     private String teamName;
@@ -184,6 +192,39 @@ public class Team {
     public void setFouls(int fouls) {
         this.fouls = fouls;
     }
+
+    public static List<Team> readTeamsFromCSV(String filePath) {
+        List<Team> teams = new ArrayList<>();
+        try (CSVReader reader = new CSVReader(new FileReader(filePath))) {
+            reader.readNext();
+            List<String[]> records = reader.readAll();
+            for (String[] record : records) {
+                String teamName = record[0];
+                int matchesPlayed = Integer.parseInt(record[1]);
+                int points = Integer.parseInt(record[2]);
+                int wins = Integer.parseInt(record[3]);
+                int draws = Integer.parseInt(record[4]);
+                int losses = Integer.parseInt(record[5]);
+                int goalsScored = Integer.parseInt(record[6]);
+                int goalsConceded = Integer.parseInt(record[7]);
+                int cleanSheets = Integer.parseInt(record[8]);
+                double possession = Double.parseDouble(record[9]);
+                int passesPerMatch = Integer.parseInt(record[10]);
+                int penaltiesAwarded = Integer.parseInt(record[11]);
+                int shots = Integer.parseInt(record[12]);
+                int shotsOnTarget = Integer.parseInt(record[13]);
+                int corners = Integer.parseInt(record[14]);
+                int fouls = Integer.parseInt(record[15]);
+
+                Team team = new Team(teamName, matchesPlayed, points, wins, draws, losses, goalsScored, goalsConceded, cleanSheets, possession, passesPerMatch, penaltiesAwarded, shots, shotsOnTarget, corners, fouls);
+                teams.add(team);
+            }
+        } catch (IOException | CsvException e) {
+            e.printStackTrace();
+        }
+        return teams;
+    }
+
 
     public void addMatchStats(int goalsScored, int goalsConceded, boolean isWin, boolean isDraw, boolean isLoss,
                               boolean cleanSheet, double possession, int passesPerMatch, int penaltiesAwarded,

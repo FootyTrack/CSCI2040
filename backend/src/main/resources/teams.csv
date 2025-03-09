@@ -1,0 +1,4 @@
+teamName	matchesPlayed	points	wins	draws	losses	goalsScored	goalsCondeded	cleanSheets	possession	passesPerMatch	penaltiesAwarded	shots	shotsOnTarget	corners	fouls
+Liverpool	10	55	2	1	0	55	20	5	60	500	3	200	100	50	30
+Manchester	10	52	1	1	0	52	18	4	58	480	2	190	95	48	28
+Arsenal	10	48	0	3	0	48	22	6	55	470	1	180	90	45	25
