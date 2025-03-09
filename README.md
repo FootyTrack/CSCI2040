@@ -26,4 +26,4 @@
 
 `npm start`
 
-5. Ensure the frontend is running on `https://localhost:3000` by opening it in a web browser.  
+5. Ensure the frontend is running on https://localhost:3000 by opening it in a web browser.  
