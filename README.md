@@ -2,28 +2,46 @@
 
 ### CSCI2040 
 
-## Running FootyTrack Project
+## Running the FootyTrack Project
 
-### Backend 
+### Prerequisites
 
-1. In your IDE, open a terminal and navigate to the FootyTrack project `CSCI2040\backend` directory.
-2. If you do not have Maven installed already, install it from [Maven's official website](https://maven.apache.org/install.html).
-3. Run the following command to install any dependencies and start the backend server:
+Ensure you have the following installed:
 
-`mvn spring-boot:run`
+- Node.js and npm (comes with Node.js). Install from [Node.js official website](https://nodejs.org/).
 
-4. Ensure the backend server is running on http://localhost:8080 by opening it in a web browser.
+## Getting Started
 
-### Frontend
+### Running the Project Locally
 
-1. In a separate window of your IDE open a terminal and navigate to the `frontend/footytrack-frontend` directory.  
-2. If you do not have Node.js and npm installed already, install from [Node.js official website](https://nodejs.org/).
-3. To install dependencies, run the following command:
+### 1. Clone the Repository
 
-`npm install`
+Clone the project repository locally by navigating to the desired directory and running:  
 
-4. Run the following command to start the frontend server:
+`git clone https://github.com/FootyTrack/CSCI2040.git`
 
-`npm start`
+### 2. Navigate to the Project Directory
 
-5. Ensure the frontend is running on https://localhost:3000 by opening it in a web browser.  
+Open the project in your IDE of choice, open a terminal window within the IDE.  Navigate to the project directory:
+
+`cd CSCI2040/footytrack3`
+
+### 3. Run Setup Script
+
+Run the setup command to install dependencies, build the project, and preview the production build:
+
+`npm run setup`
+
+### 4. Access the Application
+
+Once the setup script is complete, access the application at [http://localhost:4173](http://localhost:4173).
+
+## Development Mode
+
+To run the application in development mode use the following command instead of setup:
+
+`npm run dev`
+
+This will start the development server, which you can access at [http://localhost:5173](http://localhost:5173).
+
+
