@@ -1,0 +1,41 @@
+.teams-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    margin-top: 20px;
+  }
+  
+  .team-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    color: black;
+  }
+  
+  .team-card img {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .team-card:hover {
+    background: #e5e5e5;
+  }
+  
+  .teams-grid .team-card {
+  display: inline-block;         /* or 'inline-flex' */
+  vertical-align: top;           /* helps alignment with other cards */
+  text-align: center;            /* center the contents horizontally */
+  transition: transform 0.3s ease-in-out;
+  text-decoration: none;
+  color: black;
+}
+
+.teams-grid .team-card:hover {
+  transform: translateY(-5px);
+}
+
