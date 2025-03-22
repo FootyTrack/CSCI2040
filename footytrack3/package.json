@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage",
     "setup": "npm install && npm run build && npm run preview",
     "start": "vite",
     "dev": "vite",
