@@ -6,7 +6,8 @@ import "../styles/Players.css";
 const Players = () => {
   const [search, setSearch] = useState("");
   const [players, setPlayers] = useState([]);
-
+  const [sortAttribute, setSortAttribute] = useState(""); // State for selected attribute
+  const [sortOrder, setSortOrder] = useState(""); // State for sort order
   useEffect(() => {
     // Process players and filter out those without photos
     const processedPlayers = enhancedPlayersData
@@ -31,9 +32,21 @@ const Players = () => {
     setPlayers(processedPlayers);
   }, []);
 
-  const filteredPlayers = players.filter((player) =>
+  let filteredPlayers = players.filter((player) =>
     player.name.toLowerCase().includes(search.toLowerCase())
   );
+
+  // Sort players based on selected attribute and order
+  if (sortAttribute) {
+    filteredPlayers = [...filteredPlayers].sort((a, b) => {
+      if (sortOrder === "asc") {
+        return a[sortAttribute] > b[sortAttribute] ? 1 : -1;
+      } else if (sortOrder === "desc") {
+        return a[sortAttribute] < b[sortAttribute] ? 1 : -1;
+      }
+      return 0;
+    });
+  }
 
   return (
     <section className="section">
@@ -47,6 +60,43 @@ const Players = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
+      </div>
+
+      {/* Sorting Controls */}
+      <div className="field">
+        <label className="label">Sort By:</label>
+        <div className="control">
+          <div className="select">
+            <select
+              value={sortAttribute}
+              onChange={(e) => setSortAttribute(e.target.value)}
+            >
+              <option value="">Select Attribute</option>
+              <option value="name">Name</option>
+              <option value="team">Team</option>
+              <option value="position">Position</option>
+              <option value="saves">Saves</option>
+              <option value="goals_scored">Goals Scored</option>
+              <option value="assists">Assists</option>
+            </select>
+          </div>
+        </div>
+        <div className="buttons">
+          <button
+            className="button is-primary"
+            onClick={() => setSortOrder("asc")}
+            disabled={!sortAttribute}
+          >
+            Sort Ascending
+          </button>
+          <button
+            className="button is-primary"
+            onClick={() => setSortOrder("desc")}
+            disabled={!sortAttribute}
+          >
+            Sort Descending
+          </button>
+        </div>
       </div>
 
       <h2 className="subtitle">Premier League Players</h2>
