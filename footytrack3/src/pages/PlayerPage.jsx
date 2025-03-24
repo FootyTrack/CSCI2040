@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import enhancedPlayersData from "../data/players_with_photos.json";
 import "../styles/PlayerDetail.css";
+import useAuthStore from "../stores/authStore";
 
 // Team color mapping
 const teamColors = {
@@ -23,6 +24,8 @@ const PlayerDetail = () => {
   const { id } = useParams();
   const [player, setPlayer] = useState(null);
   const [loading, setLoading] = useState(true);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const addFavorite = useAuthStore((state) => state.addFavorite);
 
   useEffect(() => {
     // Find the player by ID
@@ -67,6 +70,11 @@ const PlayerDetail = () => {
     { label: "Saves per 90", value: player.saves_per_90 || "0" },
     { label: "Penalties Saved", value: player.penalties_saved || "0" }
   ];
+
+  const handleAddToFavorites = () => {
+    addFavorite({ id: player.id, name: player.name, type: "player" });
+    alert(`${player.name} has been added to your favorites!`);
+  };
 
   return (
     <div className="player-detail-container">
@@ -144,6 +152,36 @@ const PlayerDetail = () => {
             )}
           </div>
         </div>
+
+        {/* Add to Favorites Button */}
+        {isAuthenticated && (
+          <div style={{
+            display: "flex", // Use flexbox
+            justifyContent: "center", // Center horizontally
+            marginTop: "1rem", // Add some spacing from the content above
+          }}
+          >
+            <button
+              onClick={handleAddToFavorites}
+              className="add-to-favorites-button"
+              style={{
+                backgroundColor: "#4CAF50", // Green background
+                color: "#fff", // White text
+                border: "2px solid #3E8E41", // Add a border
+                padding: "0.5rem 1rem", // Increase padding for better visibility
+                borderRadius: "8px", // Rounded corners
+                cursor: "pointer", // Pointer cursor on hover
+                fontSize: "1rem", // Larger font size
+                fontWeight: "bold", // Bold text
+                transition: "all 0.3s ease", // Smooth hover effect
+              }}
+              onMouseEnter={(e) => (e.target.style.backgroundColor = "#3E8E41")} // Darker green on hover
+              onMouseLeave={(e) => (e.target.style.backgroundColor = "#4CAF50")} // Reset background color
+            >
+              Add to Favorites
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

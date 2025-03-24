@@ -3,10 +3,13 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { GiSoccerBall } from 'react-icons/gi';
 import { FaChevronDown } from 'react-icons/fa';
+import useAuthStore from "../stores/authStore"; // Import Zustand store
 
-const Navbar = ({ isLoggedIn }) => {
+const Navbar = () => {
   const [isCompareHovered, setIsCompareHovered] = useState(false);
-
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated); // Zustand state for "Favorites" visibility
+  const logout = useAuthStore((state) => state.logout); // Zustand logout function
+  
   return (
     <nav
       style={{
@@ -166,28 +169,65 @@ const Navbar = ({ isLoggedIn }) => {
 
       {/* Right: Favorites or Login */}
       <div>
-        {isLoggedIn ? (
+        {isAuthenticated ? (
+          <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "1rem",
+          }}
+        >
+          {/* Favorites Button */}
           <Link
             to="/favorites"
             style={{
-              color: '#000',
-              textDecoration: 'none',
-              fontSize: '1rem',
-              fontWeight: 'bold' // Bold text
+              color: "#000",
+              textDecoration: "none",
+              fontSize: "1rem",
+              fontWeight: "bold", // Bold text
             }}
           >
             Favorites
           </Link>
-        ) : (
-          <Link
-            to="/login"
+    
+          {/* Logged In Status */}
+          <span
             style={{
-              color: '#000',
-              textDecoration: 'none',
-              fontSize: '1rem',
-              fontWeight: 'bold' // Bold text
+              color: "#000",
+              fontSize: "1rem",
+              fontWeight: "bold",
             }}
           >
+            Logged In
+          </span>
+    
+          {/* Logout Button */}
+          <button
+            onClick={logout}
+            style={{
+              backgroundColor: "#FF6B6B",
+              color: "#fff",
+              border: "none",
+              padding: "0.5rem 1rem",
+              borderRadius: "4px",
+              cursor: "pointer",
+              fontSize: "0.9rem",
+              fontWeight: "bold",
+            }}
+          >
+            Logout
+          </button>
+        </div>
+      ) : (
+        <Link
+          to="/login"
+          style={{
+            color: "#000",
+            textDecoration: "none",
+            fontSize: "1rem",
+            fontWeight: "bold", // Bold text
+          }}
+        >
             Login
           </Link>
         )}

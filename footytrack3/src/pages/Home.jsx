@@ -4,7 +4,7 @@ const Home = () => {
   const [season, setSeason] = useState("2023-24");
   const [standings, setStandings] = useState([]);
   const [fixtures, setFixtures] = useState([]);
-
+  
   // Complete static dataset for 2021-22 and 2022-23 seasons
   const staticData = {
     "2021": {
