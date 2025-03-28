@@ -1,5 +1,6 @@
 // src/pages/PlayerComparison.jsx
 import React, { useState } from 'react';
+import players from "../data/players_with_photos.json";
 
 const dummyPlayers = [
   { id: 1, name: "Player A", goals: 10, assists: 5, appearances: 20 },
@@ -14,8 +15,8 @@ const PlayerComparison = () => {
 
   const handleCompare = () => {
     // Find players from dummy data
-    const p1 = dummyPlayers.find(p => p.name === player1);
-    const p2 = dummyPlayers.find(p => p.name === player2);
+    const p1 = players.find(p => p.name === player1);
+    const p2 = players.find(p => p.name === player2);
 
     if (p1 && p2) {
       setCompareData({ player1: p1, player2: p2 });
@@ -32,7 +33,7 @@ const PlayerComparison = () => {
           Player 1:{" "}
           <select value={player1} onChange={(e) => setPlayer1(e.target.value)}>
             <option value="">Select Player</option>
-            {dummyPlayers.map(player => (
+            {players.map(player => (
               <option key={player.id} value={player.name}>{player.name}</option>
             ))}
           </select>
@@ -41,7 +42,7 @@ const PlayerComparison = () => {
           Player 2:{" "}
           <select value={player2} onChange={(e) => setPlayer2(e.target.value)}>
             <option value="">Select Player</option>
-            {dummyPlayers.map(player => (
+            {players.map(player => (
               <option key={player.id} value={player.name}>{player.name}</option>
             ))}
           </select>
