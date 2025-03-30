@@ -6,16 +6,18 @@ import useAuthStore from "../stores/authStore";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(""); // State to store error message
   const login = useAuthStore((state) => state.login);
   const navigate = useNavigate(); // Initialize useNavigate
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(""); // Clear previous errors
     const success = await login(email, password);
-    if (success) {
-      navigate("/"); // Redirect to the home page on success
+    if (!success) {
+      setError("Incorrect email or password, or account does not exist.");
     } else {
-      navigate("/Create-user"); // Redirect to the create user page on failure
+      navigate("/"); // Redirect to home page if login is successful
     }
   };
 
@@ -31,7 +33,17 @@ const Login = () => {
           <label className="label">Password</label>
           <input className="input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         </div>
-        <button className="button is-primary">Login</button>
+        {error && <p className="has-text-danger">{error}</p>} {/* Display error message */}
+        <div className="buttons">
+          <button className="button is-primary">Login</button>
+          <button
+            className="button is-link"
+            type="button"
+            onClick={() => navigate("/create-user")}
+          >
+            Create User
+          </button>
+        </div>
       </form>
     </section>
   );

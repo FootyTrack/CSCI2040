@@ -190,17 +190,6 @@ const Navbar = () => {
             Favorites
           </Link>
     
-          {/* Logged In Status */}
-          <span
-            style={{
-              color: "#000",
-              fontSize: "1rem",
-              fontWeight: "bold",
-            }}
-          >
-            Logged In
-          </span>
-    
           {/* Logout Button */}
           <button
             onClick={logout}
