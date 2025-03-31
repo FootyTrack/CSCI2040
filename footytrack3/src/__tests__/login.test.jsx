@@ -1,12 +1,19 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import Login from "../pages/Login";
+import { MemoryRouter } from 'react-router-dom';
+import '@testing-library/jest-dom';
 
 describe("Login Component", () => {
   test("renders login form", () => {
-    render(<Login />);
+    render( 
+    <MemoryRouter>
+      <Login />
+    </MemoryRouter>
+    );
+    
 
-    expect(screen.getByText("Login")).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Login' })).toBeInTheDocument();
     expect(screen.getByLabelText("Email")).toBeInTheDocument();
     expect(screen.getByLabelText("Password")).toBeInTheDocument();
     expect(screen.getByText("Login")).toBeInTheDocument();
