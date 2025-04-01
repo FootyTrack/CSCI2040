@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import teams from "../data/teams";
-import "../styles/Teams.css";
+import "../styles/Teams.css"; // Updated to use Teams.css
 
 const Teams = () => {
   const [search, setSearch] = useState("");
@@ -45,55 +45,58 @@ const Teams = () => {
         />
       </div>
 
-      {/* Sorting Controls on One Line */}
-      <div className="field" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-        <label className="label" style={{ marginBottom: 0 }}>Sort By:</label>
-        <div className="select">
-          <select
-            value={sortAttribute}
-            onChange={(e) => {
-              const attribute = e.target.value;
-              setSortAttribute(attribute);
-              // Set default sort order based on attribute:
-              // For "losses", lower is better (ascending);
-              // For "wins", "draws", "points", default descending;
-              // For string attributes (like "name"), default ascending.
-              if (attribute === "") {
-                setSortOrder("");
-              } else if (attribute === "losses") {
-                setSortOrder("asc");
-              } else if (["wins", "draws", "points"].includes(attribute)) {
-                setSortOrder("desc");
-              } else {
-                setSortOrder("asc");
-              }
-            }}
-          >
-            <option value="">Select Attribute</option>
-            <option value="name">Name</option>
-            <option value="wins">Wins</option>
-            <option value="draws">Draws</option>
-            <option value="losses">Losses</option>
-            <option value="points">Points</option>
-          </select>
-        </div>
-        <div className="buttons">
-          <button
-            className="button is-primary"
-            onClick={() => setSortOrder("asc")}
-            disabled={!sortAttribute}
-            title="Sort Ascending"
-          >
-            ▲
-          </button>
-          <button
-            className="button is-primary"
-            onClick={() => setSortOrder("desc")}
-            disabled={!sortAttribute}
-            title="Sort Descending"
-          >
-            ▼
-          </button>
+      {/* Extra space added between search bar and sorting controls */}
+      <div style={{ marginTop: '1rem' }}>
+        {/* Sorting Controls on One Line */}
+        <div className="field" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <label className="label" style={{ marginBottom: 0 }}>Sort By:</label>
+          <div className="select">
+            <select
+              value={sortAttribute}
+              onChange={(e) => {
+                const attribute = e.target.value;
+                setSortAttribute(attribute);
+                // Set default sort order based on attribute:
+                // For "losses", lower is better (ascending);
+                // For "wins", "draws", "points", default descending;
+                // For string attributes (like "name"), default ascending.
+                if (attribute === "") {
+                  setSortOrder("");
+                } else if (attribute === "losses") {
+                  setSortOrder("asc");
+                } else if (["wins", "draws", "points"].includes(attribute)) {
+                  setSortOrder("desc");
+                } else {
+                  setSortOrder("asc");
+                }
+              }}
+            >
+              <option value="">Select Attribute</option>
+              <option value="name">Name</option>
+              <option value="wins">Wins</option>
+              <option value="draws">Draws</option>
+              <option value="losses">Losses</option>
+              <option value="points">Points</option>
+            </select>
+          </div>
+          <div className="buttons">
+            <button
+              className="button is-primary"
+              onClick={() => setSortOrder("asc")}
+              disabled={!sortAttribute}
+              title="Sort Ascending"
+            >
+              ▲
+            </button>
+            <button
+              className="button is-primary"
+              onClick={() => setSortOrder("desc")}
+              disabled={!sortAttribute}
+              title="Sort Descending"
+            >
+              ▼
+            </button>
+          </div>
         </div>
       </div>
 
