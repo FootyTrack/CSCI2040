@@ -39,18 +39,23 @@ const Players = () => {
   // Sort players based on selected attribute and order
   if (sortAttribute) {
     filteredPlayers = [...filteredPlayers].sort((a, b) => {
+      // If the attribute is numeric, compare as numbers; else as strings.
+      const isNumeric = ["saves", "goals_scored", "assists"].includes(sortAttribute);
+      const valA = isNumeric ? Number(a[sortAttribute]) : a[sortAttribute];
+      const valB = isNumeric ? Number(b[sortAttribute]) : b[sortAttribute];
+  
       if (sortOrder === "asc") {
-        return a[sortAttribute] > b[sortAttribute] ? 1 : -1;
+        return isNumeric ? valA - valB : valA.localeCompare(valB);
       } else if (sortOrder === "desc") {
-        return a[sortAttribute] < b[sortAttribute] ? 1 : -1;
+        return isNumeric ? valB - valA : valB.localeCompare(valA);
       }
       return 0;
     });
   }
-
+  
   return (
     <section className="section">
-      <h1 className="title has-text-centered">Players</h1>
+      <h1 className="title has-text-centered">Premier League Players</h1>
       
       <div className="field">
         <input
@@ -62,44 +67,56 @@ const Players = () => {
         />
       </div>
 
-      {/* Sorting Controls */}
-      <div className="field">
-        <label className="label">Sort By:</label>
-        <div className="control">
-          <div className="select">
-            <select
-              value={sortAttribute}
-              onChange={(e) => setSortAttribute(e.target.value)}
-            >
-              <option value="">Select Attribute</option>
-              <option value="name">Name</option>
-              <option value="team">Team</option>
-              <option value="position">Position</option>
-              <option value="saves">Saves</option>
-              <option value="goals_scored">Goals Scored</option>
-              <option value="assists">Assists</option>
-            </select>
-          </div>
-        </div>
-        <div className="buttons">
-          <button
-            className="button is-primary"
-            onClick={() => setSortOrder("asc")}
-            disabled={!sortAttribute}
-          >
-            Sort Ascending
-          </button>
-          <button
-            className="button is-primary"
-            onClick={() => setSortOrder("desc")}
-            disabled={!sortAttribute}
-          >
-            Sort Descending
-          </button>
-        </div>
-      </div>
+ {/* Sorting Controls */}
+<div className="field">
+  <label className="label">Sort By:</label>
+  <div
+    className="control"
+    style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}
+  >
+    <div className="select">
+      <select
+        value={sortAttribute}
+        onChange={(e) => {
+          const attribute = e.target.value;
+          setSortAttribute(attribute);
+          // For numeric attributes, default to descending; for others, ascending.
+          const numericAttributes = ["saves", "goals_scored", "assists"];
+          setSortOrder(numericAttributes.includes(attribute) ? "desc" : "asc");
+        }}
+      >
+        <option value="">Select Attribute</option>
+        <option value="name">Name</option>
+        <option value="team">Team</option>
+        <option value="goals_scored">Goals Scored</option>
+        <option value="assists">Assists</option>
+        <option value="saves">Saves</option>
+      </select>
+    </div>
+    <div className="buttons">
+      <button
+        className="button is-primary"
+        onClick={() => setSortOrder("asc")}
+        disabled={!sortAttribute}
+        title="Sort Ascending"
+      >
+        ▲
+      </button>
+      <button
+        className="button is-primary"
+        onClick={() => setSortOrder("desc")}
+        disabled={!sortAttribute}
+        title="Sort Descending"
+      >
+        ▼
+      </button>
+    </div>
+  </div>
+</div>
 
-      <h2 className="subtitle">Premier League Players</h2>
+
+
+      {/* <h2 className="subtitle">Premier League Players</h2> */}
 
       <div className="players-grid">
         {filteredPlayers.map((player) => (
