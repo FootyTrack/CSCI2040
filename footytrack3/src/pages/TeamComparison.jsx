@@ -10,7 +10,7 @@ const TeamComparison = () => {
 
   const handleCompare = () => {
     if (team1 && team2) {
-      navigate(`/compare/${team1}/vs/${team2}`);
+      navigate(`/compare/teams/${team1}/vs/${team2}`);
     } else {
       alert('Please select two teams to compare.');
     }
@@ -30,7 +30,7 @@ const TeamComparison = () => {
         boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
       }}
     >
-      <h1 className="title has-text-centered" style={{ marginBottom: '1rem' }}>
+      <h1 className="title has-text-centered" style={{ marginBottom: '3rem' }}>
         Team Comparison
       </h1>
       <div className="columns is-centered">
@@ -50,7 +50,7 @@ const TeamComparison = () => {
               </div>
             </div>
           </div>
-          <div className="field" style={{ marginBottom: '1.5rem' }}>
+          <div className="field" style={{ marginBottom: '2rem' }}>
             <label className="label">Select Team 2</label>
             <div className="control">
               <div className="select is-primary is-fullwidth">

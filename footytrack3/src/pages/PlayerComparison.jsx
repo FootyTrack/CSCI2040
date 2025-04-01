@@ -1,150 +1,104 @@
-// src/pages/PlayerComparison.jsx
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import players from "../data/players_with_photos.json";
-import teams from "../data/teams.js";
+import "../styles/Players.css";
 
-const dummyPlayers = [
-  { id: 1, name: "Player A", goals: 10, assists: 5, appearances: 20 },
-  { id: 2, name: "Player B", goals: 8, assists: 7, appearances: 18 },
-  { id: 3, name: "Player C", goals: 12, assists: 3, appearances: 22 }
-];
+// Sort players alphabetically by name
+const sortedPlayers = players.slice().sort((a, b) => a.name.localeCompare(b.name));
 
 const PlayerComparison = () => {
   const [player1, setPlayer1] = useState("");
   const [player2, setPlayer2] = useState("");
-  const [compareData, setCompareData] = useState(null);
+  const navigate = useNavigate();
 
-  // Process players to generate displayPhotoPath dynamically
-  const processedPlayers = players.map(player => {
+  // Process players to generate displayPhotoPath dynamically (not strictly needed if only picking names)
+  const processedPlayers = sortedPlayers
+  .map((player) => {
     let photoPath = "";
-
     if (player.photo_path && player.photo_path.trim() !== "") {
-      // Extract the filename and create the correct web path
       const filename = player.photo_path.split(/[\\\/]/).pop();
       photoPath = `/assets/player_headshots/${filename}`;
     }
-
     return {
       ...player,
       displayPhotoPath: photoPath,
     };
-  });
+  })
+  .filter(player => player.displayPhotoPath !== "");
 
   const handleCompare = () => {
-    const p1 = processedPlayers.find(p => p.name === player1);
-    const p2 = processedPlayers.find(p => p.name === player2);
-
-    if (p1 && p2) {
-      setCompareData({ player1: p1, player2: p2 });
+    if (player1 && player2) {
+      // Navigate to the detail page: /compare/:player1/vs/:player2
+      navigate(`/compare/players/${encodeURIComponent(player1)}/vs/${encodeURIComponent(player2)}`);
     } else {
-      alert("Please select valid players for both fields.");
+      alert("Please select two players to compare.");
     }
   };
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h1 style={{ fontWeight: "bold", fontSize: "2rem", textAlign: "center" }}>
+    <div
+      className="container"
+      style={{
+        padding: "2rem",
+        maxWidth: "800px",
+        marginTop: "2rem",
+        borderRadius: "8px",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
+      }}
+    >
+      <h1 className="title has-text-centered" style={{ marginBottom: "3rem" }}>
         Player Comparison
-        </h1>
-      <div style={{ marginBottom: "1rem", textAlign: "center"}}>
-        <label>
-          Player 1:{" "}
-          <select value={player1} onChange={(e) => setPlayer1(e.target.value)}>
-            <option value="">Select Player</option>
-            {players.map(player => (
-              <option key={player.id} value={player.name}>{player.name}</option>
-            ))}
-          </select>
-        </label>
-        <label style={{ marginLeft: "1rem" }}>
-          Player 2:{" "}
-          <select value={player2} onChange={(e) => setPlayer2(e.target.value)}>
-            <option value="">Select Player</option>
-            {players.map(player => (
-              <option key={player.id} value={player.name}>{player.name}</option>
-            ))}
-          </select>
-        </label>
-        <button onClick={handleCompare} 
-          style={{ 
-            marginLeft: "1rem", 
-            padding: "0.5rem 1rem",
-            backgroundColor: "#00FFBF",
-            color: "#000",
-            borderRadius: "4px",
-            cursor: "pointer",
-            fontWeight: "bold",
-          }}>
-          Compare
-        </button>
-      </div>
-      {compareData && (
-        <div>
-          <h2>Comparison Results</h2>
-          <div style={{ display: "flex", justifyContent: "space-around", marginBottom: "1rem" }}>
-            {/* Player 1 Photo */}
-            <div style={{ textAlign: "center" }}>
-              <img
-                src={compareData.player1.displayPhotoPath}
-                alt={compareData.player1.name}
-                style={{ width: "150px", height: "150px", borderRadius: "50%" }}
-              />
-              <p style={{ fontWeight: "bold" }}>{compareData.player1.name}</p>
-              <img
-                src={compareData.player1.team_icon}
-                alt={`${compareData.player1.team} Icon`}
-                style={{ width: "50px", height: "50px" }}
-              />
-              <p>{compareData.player1.team}</p>
-            </div>
-
-            {/* Player 2 Photo */}
-            <div style={{ textAlign: "center" }}>
-              <img
-                src={compareData.player2.displayPhotoPath}
-                alt={compareData.player2.name}
-                style={{ width: "150px", height: "150px", borderRadius: "50%" }}
-              />
-              <p style={{ fontWeight: "bold" }}>{compareData.player2.name}</p>
-              <img
-                src={compareData.player2.team_icon}
-                alt={`${compareData.player2.team} Icon`}
-                style={{ width: "50px", height: "50px" }}
-              />
-              <p>{compareData.player2.team}</p>
+      </h1>
+      <div className="columns is-centered">
+        <div className="column is-half">
+          {/* Player 1 Field */}
+          <div className="field" style={{ marginBottom: "1.5rem" }}>
+            <label className="label">Select Player 1</label>
+            <div className="control">
+              <div className="select is-primary is-fullwidth">
+                <select 
+                  value={player1} 
+                  onChange={(e) => setPlayer1(e.target.value)}
+                >
+                  <option value="">Select Player</option>
+                  {processedPlayers.map(player => (
+                    <option key={player.id} value={player.name}>{player.name}</option>
+                  ))}
+                </select>
+              </div>
             </div>
           </div>
-
-
-          <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "center" }} border="1" cellPadding="8">
-            <thead>
-              <tr style={{ backgroundColor: "#00FFBF", color: "#000",
-               }}>
-                <th style={{ color: "#000" }}>Stat</th>
-                <th style={{ color: "#000" }}>{compareData.player1.name}</th>
-                <th style={{ color: "#000" }}>{compareData.player2.name}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Goals</td>
-                <td>{compareData.player1.goals}</td>
-                <td>{compareData.player2.goals}</td>
-              </tr>
-              <tr>
-                <td>Assists</td>
-                <td>{compareData.player1.assists}</td>
-                <td>{compareData.player2.assists}</td>
-              </tr>
-              <tr>
-                <td>Appearances</td>
-                <td>{compareData.player1.appearances}</td>
-                <td>{compareData.player2.appearances}</td>
-              </tr>
-            </tbody>
-          </table>
+          {/* Player 2 Field */}
+          <div className="field" style={{ marginBottom: "2rem" }}>
+            <label className="label">Select Player 2</label>
+            <div className="control">
+              <div className="select is-primary is-fullwidth">
+                <select 
+                  value={player2}
+                  onChange={(e) => setPlayer2(e.target.value)}
+                >
+                  <option value="">Select Player</option>
+                  {processedPlayers.map(player => (
+                    <option key={player.id} value={player.name}>{player.name}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+          {/* Compare Button */}
+          <div className="field">
+            <div className="control">
+              <button
+                onClick={handleCompare}
+                className="button is-primary is-fullwidth"
+                style={{ padding: "0.75rem", fontSize: "1rem" }}
+              >
+                Compare
+              </button>
+            </div>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
