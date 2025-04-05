@@ -16,6 +16,7 @@ import TeamComparison from "./pages/TeamComparison";
 import CompareTeams from "./pages/CompareTeams";
 import CreateUser from "./pages/CreateUser";
 import PlayerComparison from "./pages/PlayerComparison";
+import ComparePlayers from "./pages/ComparePlayers";
 
 const App = () => {
   // Set isLoggedIn to true/false based on your authentication logic.
@@ -34,8 +35,9 @@ const App = () => {
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/teams/:id" element={<TeamPage />} />
         <Route path="/players/:id" element={<PlayerPage />} />
-        <Route path="/compare/:team1/vs/:team2" element={<CompareTeams />} />
         <Route path="/compare/teams" element={<TeamComparison />} />
+        <Route path="/compare/teams/:team1/vs/:team2" element={<CompareTeams />} />
+        <Route path="/compare/players/:player1/vs/:player2" element={<ComparePlayers />} />
         <Route path="/compare/players" element={<PlayerComparison />} />
       </Routes>
     </Router>

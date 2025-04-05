@@ -193,6 +193,7 @@ const TeamPage = () => {
             display: "flex", // Use flexbox
             justifyContent: "center", // Center horizontally
             marginTop: "1rem", // Add some spacing from the content above
+            marginBottom: "2rem"
           }}
           >
             <button
