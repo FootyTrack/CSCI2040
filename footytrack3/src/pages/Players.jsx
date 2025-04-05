@@ -6,29 +6,24 @@ import "../styles/Players.css";
 const Players = () => {
   const [search, setSearch] = useState("");
   const [players, setPlayers] = useState([]);
-  const [sortAttribute, setSortAttribute] = useState(""); // State for selected attribute
-  const [sortOrder, setSortOrder] = useState(""); // State for sort order
+  const [sortAttribute, setSortAttribute] = useState(""); // Selected attribute
+  const [sortOrder, setSortOrder] = useState(""); // Sort order ("asc" or "desc")
+
   useEffect(() => {
     // Process players and filter out those without photos
     const processedPlayers = enhancedPlayersData
-      .map(player => {
-        let photoPath = '';
-        
-        if (player.photo_path && player.photo_path.trim() !== '') {
-          // Get just the filename without any directory information
+      .map((player) => {
+        let photoPath = "";
+        if (player.photo_path && player.photo_path.trim() !== "") {
           const filename = player.photo_path.split(/[\\\/]/).pop();
-          
-          // Create the correct web path
           photoPath = `/assets/player_headshots/${filename}`;
         }
-        
         return {
           ...player,
-          displayPhotoPath: photoPath
+          displayPhotoPath: photoPath,
         };
       })
-      .filter(player => player.displayPhotoPath !== ''); // Only keep players with photos
-    
+      .filter((player) => player.displayPhotoPath !== "");
     setPlayers(processedPlayers);
   }, []);
 
@@ -36,13 +31,17 @@ const Players = () => {
     player.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Sort players based on selected attribute and order
   if (sortAttribute) {
     filteredPlayers = [...filteredPlayers].sort((a, b) => {
+      // For numeric attributes, use Number conversion.
+      const numericAttributes = ["saves", "goals_scored", "assists"];
+      const isNumeric = numericAttributes.includes(sortAttribute);
+      const valA = isNumeric ? Number(a[sortAttribute]) : a[sortAttribute];
+      const valB = isNumeric ? Number(b[sortAttribute]) : b[sortAttribute];
       if (sortOrder === "asc") {
-        return a[sortAttribute] > b[sortAttribute] ? 1 : -1;
+        return isNumeric ? valA - valB : valA.localeCompare(valB);
       } else if (sortOrder === "desc") {
-        return a[sortAttribute] < b[sortAttribute] ? 1 : -1;
+        return isNumeric ? valB - valA : valB.localeCompare(valA);
       }
       return 0;
     });
@@ -50,8 +49,9 @@ const Players = () => {
 
   return (
     <section className="section">
-      <h1 className="title has-text-centered">Players</h1>
-      
+      <h1 className="title has-text-centered">Premier League Players</h1>
+
+      {/* Search Bar */}
       <div className="field">
         <input
           className="input"
@@ -62,60 +62,74 @@ const Players = () => {
         />
       </div>
 
-      {/* Sorting Controls */}
-      <div className="field">
-        <label className="label">Sort By:</label>
-        <div className="control">
+      <div style={{ marginTop: "1rem" }}>
+        {/* Sorting Controls on one line */}
+        <div
+          className="field"
+          style={{ display: "flex", alignItems: "center", gap: "1rem" }}
+        >
+          <label className="label" style={{ marginBottom: 0 }}>
+            Sort By:
+          </label>
           <div className="select">
             <select
               value={sortAttribute}
-              onChange={(e) => setSortAttribute(e.target.value)}
+              onChange={(e) => {
+                const attribute = e.target.value;
+                setSortAttribute(attribute);
+                // For numeric attributes default descending; otherwise ascending.
+                const numericAttributes = ["saves", "goals_scored", "assists"];
+                setSortOrder(attribute ? (numericAttributes.includes(attribute) ? "desc" : "asc") : "");
+              }}
             >
               <option value="">Select Attribute</option>
               <option value="name">Name</option>
               <option value="team">Team</option>
-              <option value="position">Position</option>
+              {/* Uncomment if desired: <option value="position">Position</option> */}
               <option value="saves">Saves</option>
               <option value="goals_scored">Goals Scored</option>
               <option value="assists">Assists</option>
             </select>
           </div>
-        </div>
-        <div className="buttons">
-          <button
-            className="button is-primary"
-            onClick={() => setSortOrder("asc")}
-            disabled={!sortAttribute}
-          >
-            Sort Ascending
-          </button>
-          <button
-            className="button is-primary"
-            onClick={() => setSortOrder("desc")}
-            disabled={!sortAttribute}
-          >
-            Sort Descending
-          </button>
+          <div className="buttons">
+            <button
+              className="button is-primary"
+              onClick={() => setSortOrder("asc")}
+              disabled={!sortAttribute}
+              title="Sort Ascending"
+            >
+              ▲
+            </button>
+            <button
+              className="button is-primary"
+              onClick={() => setSortOrder("desc")}
+              disabled={!sortAttribute}
+              title="Sort Descending"
+            >
+              ▼
+            </button>
+          </div>
         </div>
       </div>
 
-      <h2 className="subtitle">Premier League Players</h2>
+      {/* <h2 className="subtitle">Premier League Players</h2> */}
 
       <div className="players-grid">
         {filteredPlayers.map((player) => (
-          <Link to={`/players/${player.id}`} key={player.id} className="player-card">
+          <Link
+            to={`/players/${player.id}`}
+            key={player.id}
+            className="player-card"
+          >
             <img
               src={player.displayPhotoPath}
               alt={player.name}
               className="player-headshot"
               onError={(e) => {
-                // Fall back to placeholder if image fails to load
                 e.target.onerror = null;
-                e.target.style.display = 'none';
-                
-                // Create and display a placeholder
-                const placeholder = document.createElement('div');
-                placeholder.className = 'player-placeholder';
+                e.target.style.display = "none";
+                const placeholder = document.createElement("div");
+                placeholder.className = "player-placeholder";
                 placeholder.innerText = player.name.charAt(0);
                 e.target.parentNode.insertBefore(placeholder, e.target.nextSibling);
               }}
@@ -123,7 +137,9 @@ const Players = () => {
             <div className="player-info">
               <p className="player-name">{player.name}</p>
               <p className="player-team">{player.team}</p>
-              {player.position && <p className="player-position">{player.position}</p>}
+              {player.position && (
+                <p className="player-position">{player.position}</p>
+              )}
             </div>
           </Link>
         ))}

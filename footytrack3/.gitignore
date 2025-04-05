@@ -1,0 +1,40 @@
+# dependencies
+node_modules/
+
+# production build
+dist/
+build/
+
+# Vite cache
+.vite/
+.vitepress/cache/
+
+# local env files
+.env
+.env.*.local
+
+# testing
+coverage/
+*.lcov
+
+# jest cache
+jest-cache/
+jest-coverage/
+
+# IDE/editor stuff
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# misc
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*

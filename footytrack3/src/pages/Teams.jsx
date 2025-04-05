@@ -5,8 +5,8 @@ import "../styles/Teams.css"; // Updated to use Teams.css
 
 const Teams = () => {
   const [search, setSearch] = useState("");
-  const [sortAttribute, setSortAttribute] = useState(""); // State for selected attribute
-  const [sortOrder, setSortOrder] = useState(""); // State for sort order
+  const [sortAttribute, setSortAttribute] = useState(""); // Selected attribute
+  const [sortOrder, setSortOrder] = useState(""); // Sort order ("asc" or "desc")
 
   let filteredTeams = teams.filter(team =>
     team.name.toLowerCase().includes(search.toLowerCase())
@@ -15,10 +15,16 @@ const Teams = () => {
   // Sort teams based on selected attribute and order
   if (sortAttribute) {
     filteredTeams = [...filteredTeams].sort((a, b) => {
+      // Define numeric attributes for teams
+      const numericAttributes = ["wins", "draws", "losses", "points"];
+      const isNumeric = numericAttributes.includes(sortAttribute);
+      const valA = isNumeric ? Number(a[sortAttribute]) : a[sortAttribute];
+      const valB = isNumeric ? Number(b[sortAttribute]) : b[sortAttribute];
+
       if (sortOrder === "asc") {
-        return a[sortAttribute] > b[sortAttribute] ? 1 : -1;
+        return isNumeric ? valA - valB : valA.localeCompare(valB);
       } else if (sortOrder === "desc") {
-        return a[sortAttribute] < b[sortAttribute] ? 1 : -1;
+        return isNumeric ? valB - valA : valB.localeCompare(valA);
       }
       return 0;
     });
@@ -26,7 +32,7 @@ const Teams = () => {
 
   return (
     <section className="section">
-      <h1 className="title has-text-centered">Teams</h1>
+      <h1 className="title has-text-centered">Premier League Teams</h1>
       
       {/* Search Bar */}
       <div className="field">
@@ -39,14 +45,31 @@ const Teams = () => {
         />
       </div>
 
-      {/* Sorting Controls */}
-      <div className="field">
-        <label className="label">Sort By:</label>
-        <div className="control">
+      {/* Extra space added between search bar and sorting controls */}
+      <div style={{ marginTop: '1rem' }}>
+        {/* Sorting Controls on One Line */}
+        <div className="field" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <label className="label" style={{ marginBottom: 0 }}>Sort By:</label>
           <div className="select">
             <select
               value={sortAttribute}
-              onChange={(e) => setSortAttribute(e.target.value)}
+              onChange={(e) => {
+                const attribute = e.target.value;
+                setSortAttribute(attribute);
+                // Set default sort order based on attribute:
+                // For "losses", lower is better (ascending);
+                // For "wins", "draws", "points", default descending;
+                // For string attributes (like "name"), default ascending.
+                if (attribute === "") {
+                  setSortOrder("");
+                } else if (attribute === "losses") {
+                  setSortOrder("asc");
+                } else if (["wins", "draws", "points"].includes(attribute)) {
+                  setSortOrder("desc");
+                } else {
+                  setSortOrder("asc");
+                }
+              }}
             >
               <option value="">Select Attribute</option>
               <option value="name">Name</option>
@@ -54,30 +77,30 @@ const Teams = () => {
               <option value="draws">Draws</option>
               <option value="losses">Losses</option>
               <option value="points">Points</option>
-              <option value="founded">Founded</option>
-              <option value="venue">Stadium</option>
             </select>
           </div>
-        </div>
-        <div className="buttons">
-          <button
-            className="button is-primary"
-            onClick={() => setSortOrder("asc")}
-            disabled={!sortAttribute}
-          >
-            Sort Ascending
-          </button>
-          <button
-            className="button is-primary"
-            onClick={() => setSortOrder("desc")}
-            disabled={!sortAttribute}
-          >
-            Sort Descending
-          </button>
+          <div className="buttons">
+            <button
+              className="button is-primary"
+              onClick={() => setSortOrder("asc")}
+              disabled={!sortAttribute}
+              title="Sort Ascending"
+            >
+              ▲
+            </button>
+            <button
+              className="button is-primary"
+              onClick={() => setSortOrder("desc")}
+              disabled={!sortAttribute}
+              title="Sort Descending"
+            >
+              ▼
+            </button>
+          </div>
         </div>
       </div>
 
-      <h2 className="subtitle">Premier League Teams</h2>
+      {/* Teams Grid */}
       <div className="teams-grid">
         {filteredTeams.map(team => (
           <Link to={`/teams/${team.id}`} key={team.id} className="team-card">
@@ -87,11 +110,8 @@ const Teams = () => {
                 alt={team.name} 
                 className="team-logo"
                 onError={(e) => {
-                  // Fall back to placeholder if image fails to load
                   e.target.onerror = null;
                   e.target.style.display = 'none';
-                  
-                  // Create and display a placeholder
                   const placeholder = document.createElement('div');
                   placeholder.className = 'team-placeholder';
                   placeholder.innerText = team.name.charAt(0);
